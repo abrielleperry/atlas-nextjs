@@ -1,4 +1,5 @@
 import TopicLink from "./TopicLink";
+import { fetchTopics } from "@/lib/data";
 
 const topics = [
   { id: "1", title: "C#" },
@@ -7,6 +8,7 @@ const topics = [
 ];
 
 export default async function TopicLinks() {
+  const topics = await fetchTopics();
   return (
     <>
       {topics.map((topic) => {
