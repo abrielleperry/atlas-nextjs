@@ -1,5 +1,7 @@
+import { resolve } from "path";
 import React from "react";
 
-export default function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
+  await new Promise((resolve) => setTimeout(resolve, 3000));
   return <div>Topics Page: {params.id}</div>;
 }
