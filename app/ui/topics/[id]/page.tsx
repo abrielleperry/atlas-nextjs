@@ -3,17 +3,15 @@ import { Question } from "@/components/Question";
 import { fetchQuestions, fetchTopic } from "@/lib/data";
 import { HashtagIcon } from "@heroicons/react/24/outline";
 
-// Correctly define the props type
 interface PageProps {
-  params: Promise<{ id: string }>; // Adjusting based on the error message
+  params: Promise<{ id: string }>;
 }
 
 export default async function Page({ params }: PageProps) {
-  const resolvedParams = await params; // Resolve the Promise
+  const resolvedParams = await params;
   const topic = await fetchTopic(resolvedParams.id);
   const questions = await fetchQuestions(resolvedParams.id);
 
-  // Handling the case when the topic is not found
   if (!topic) {
     return <div>Topic not found</div>;
   }

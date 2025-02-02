@@ -1,11 +1,5 @@
-import TopicLink from "./TopicLink";
 import { fetchTopics } from "@/lib/data";
-
-const topics = [
-  { id: "1", title: "C#" },
-  { id: "2", title: "Python" },
-  { id: "3", title: "Golang" },
-];
+import TopicLink from "./TopicLink";
 
 export default async function TopicLinks() {
   const topics = await fetchTopics();
