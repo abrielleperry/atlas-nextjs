@@ -4,6 +4,7 @@ import { fetchQuestions, fetchTopic } from "@/lib/data";
 import { HashtagIcon } from "@heroicons/react/24/outline";
 
 export default async function Page({ params }: { params: { id: string } }) {
+  await new Promise((r) => setTimeout(r, 3000));
   const topic = await fetchTopic(params.id);
   const questions = await fetchQuestions(params.id);
 
