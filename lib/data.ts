@@ -1,5 +1,20 @@
-import { sql } from "@vercel/postgres";
+import { db, sql } from "@vercel/postgres";
 import { Question, Topic, User } from "./definitions";
+
+export async function fetchQuestion(id: string) {
+  return await db.question.findUnique({
+    where: { id },
+  });
+}
+
+export async function fetchAnswers(questionId: string) {
+  return await db.answer.findMany({
+    where: { questionId },
+    orderBy: {
+      accepted: "desc",
+    },
+  });
+}
 
 export async function fetchUser(email: string): Promise<User | undefined> {
   try {
