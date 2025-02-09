@@ -1,8 +1,22 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { insertTopic, insertQuestion, incrementVotes } from "./data";
+import {
+  insertTopic,
+  insertQuestion,
+  incrementVotes,
+  InsertAnswer,
+  markAsAcceptedAnswer,
+} from "./data";
 import { redirect } from "next/navigation";
+
+export async function addAnswer(questionId: string, answer: string) {
+  await InsertAnswer(questionId, answer);
+}
+
+export async function acceptAnswer(questionId: string, answerId: string) {
+  await markAsAcceptedAnswer(questionId, answerId);
+}
 
 export async function addTopic(data: FormData) {
   let topic;
