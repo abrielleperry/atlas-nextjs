@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 const AnswerItem = ({
   answer,
 }: {
-  answer: { id: string; answer: string; accepted: boolean };
+  answer: { id: string; answer: string; accepted: boolean; questionId: string };
 }) => {
   const router = useRouter();
   const handleAcceptAnswer = async () => {
