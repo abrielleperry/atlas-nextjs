@@ -1,19 +1,28 @@
 import { db, sql } from "@vercel/postgres";
-import { Question, Topic, User } from "./definitions";
+import { Question, Topic, User, Answer } from "./definitions";
 
 export async function fetchQuestion(id: string) {
-  return await db.question.findUnique({
-    where: { id },
-  });
+  try {
+    const data = await sql<Question>`SELECT * FROM questions WHERE id = ${id}`;
+    return data.rows.length > 0 ? data.rows[0] : null;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch question.");
+  }
 }
 
 export async function fetchAnswers(questionId: string) {
-  return await db.answer.findMany({
-    where: { questionId },
-    orderBy: {
-      accepted: "desc",
-    },
-  });
+  try {
+    const data =
+      await sql<Answer>`SELECT * FROM answers WHERE question_id = ${questionId}
+    ORDER BY CASE WHEN id  = (SELECT answer_id FROM questions WHERE id = ${questionId})
+    THEN 0 ELSE 1 END, id ASC;
+    `;
+    return data.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch answers.");
+  }
 }
 
 export async function fetchUser(email: string): Promise<User | undefined> {
