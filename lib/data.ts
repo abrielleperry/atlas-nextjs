@@ -1,6 +1,34 @@
 import { db, sql } from "@vercel/postgres";
 import { Question, Topic, User, Answer } from "./definitions";
 
+export async function InsertAnswer(question_id: string, answer: string) {
+  try {
+    await sql`
+      INSERT INTO answers (answer, question_id)
+      VALUES (${answer}, ${questionId});
+    `;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to insert answer.");
+  }
+}
+
+export async function markAsAcceptedAnswer(
+  questionId: string,
+  answerId: string
+) {
+  try {
+    await sql`
+      UPDATE questions
+      SET answer_id = ${answerId}
+      WHERE id = ${questionId};
+    `;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to mark answer as accepted.");
+  }
+}
+
 export async function fetchQuestion(id: string) {
   try {
     const data = await sql<Question>`SELECT * FROM questions WHERE id = ${id}`;
