@@ -1,10 +1,14 @@
-import AnswerItem from "@/components/AnswerItem";
+import React from "react";
+import AnswerItem from "./AnswerItem";
 
 const AnswerList = ({
   answers,
 }: {
   answers: { id: string; answer: string; accepted: boolean }[];
 }) => {
+  if (answers.length === 0) {
+    return <p>No answers yet.</p>;
+  }
   return (
     <div>
       <h2>Answers</h2>
@@ -18,3 +22,5 @@ const AnswerList = ({
     </div>
   );
 };
+
+export default AnswerList;

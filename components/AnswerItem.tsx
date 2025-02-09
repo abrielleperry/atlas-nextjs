@@ -20,3 +20,5 @@ const AnswerItem = ({
     </div>
   );
 };
+
+export default AnswerItem;

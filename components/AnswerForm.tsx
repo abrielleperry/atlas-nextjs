@@ -24,3 +24,5 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
     </form>
   );
 };
+
+export default AnswerForm;
