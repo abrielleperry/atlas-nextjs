@@ -31,7 +31,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return null;
       },
     }),
-    GitHub,
+    GitHub({
+      clientId: process.env.GITHUB_ID!,
+      clientSecret: process.env.GITHUB_SECRET!,
+    }),
   ],
   callbacks: {
     authorized: async ({ auth }) => {
