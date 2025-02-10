@@ -1,17 +1,12 @@
-import { NextResponse } from "next/server";
 import { fetchQuestions } from "@/lib/data";
+import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  try {
-    const questions = await fetchQuestions(params.id);
-    return NextResponse.json({ questions });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch questions" },
-      { status: 500 }
-    );
-  }
+  const questions = await fetchQuestions(params.id);
+  return NextResponse.json(questions);
 }
+
+// test: http://localhost:3000/api/topics/1a8de96c-3688-4c65-8771-c0136dbd97f5/questions
