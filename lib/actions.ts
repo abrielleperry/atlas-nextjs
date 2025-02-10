@@ -5,17 +5,27 @@ import {
   insertTopic,
   insertQuestion,
   incrementVotes,
-  InsertAnswer,
+  insertAnswer,
   markAsAcceptedAnswer,
 } from "./data";
 import { redirect } from "next/navigation";
 
 export async function addAnswer(questionId: string, answer: string) {
-  await InsertAnswer(questionId, answer);
+  try {
+    await insertAnswer(questionId, answer);
+    revalidatePath(`/ui/questions/${questionId}`);
+  } catch (error) {
+    throw new Error("Failed to add answer.");
+  }
 }
 
 export async function acceptAnswer(questionId: string, answerId: string) {
-  await markAsAcceptedAnswer(questionId, answerId);
+  try {
+    await markAsAcceptedAnswer(questionId, answerId);
+    revalidatePath(`/ui/questions/${questionId}`);
+  } catch (error) {
+    throw new Error("Failed to mark answer as accepted.");
+  }
 }
 
 export async function addTopic(data: FormData) {

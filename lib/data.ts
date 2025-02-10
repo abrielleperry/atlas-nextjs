@@ -1,14 +1,18 @@
-import { db, sql } from "@vercel/postgres";
-import { Question, Topic, User, Answer } from "./definitions";
+import { sql } from "@vercel/postgres";
+import { Question, Topic, User } from "./definitions";
 
-export async function InsertAnswer(question_id: string, answer: string) {
+export async function insertAnswer(questionId: string, answer: string) {
+  if (!questionId || !answer.trim()) {
+    throw new Error("Invalid input: Question ID and Answer are required.");
+  }
+
   try {
     await sql`
       INSERT INTO answers (answer, question_id)
       VALUES (${answer}, ${questionId});
     `;
   } catch (error) {
-    console.error("Database Error:", error);
+    console.error("Failed to insert answer.", error);
     throw new Error("Failed to insert answer.");
   }
 }
@@ -17,6 +21,10 @@ export async function markAsAcceptedAnswer(
   questionId: string,
   answerId: string
 ) {
+  if (!questionId || !answerId) {
+    throw new Error("Invalid input: Question ID and Answer ID are required.");
+  }
+
   try {
     await sql`
       UPDATE questions
@@ -24,33 +32,20 @@ export async function markAsAcceptedAnswer(
       WHERE id = ${questionId};
     `;
   } catch (error) {
-    console.error("Database Error:", error);
-    throw new Error("Failed to mark answer as accepted.");
+    console.error("Failed to mark answer as accepted:", error);
+    throw new Error("Failed to accept answer.");
   }
 }
 
 export async function fetchQuestion(id: string) {
-  try {
-    const data = await sql<Question>`SELECT * FROM questions WHERE id = ${id}`;
-    return data.rows.length > 0 ? data.rows[0] : null;
-  } catch (error) {
-    console.error("Database Error:", error);
-    throw new Error("Failed to fetch question.");
-  }
+  const result = await sql`SELECT * FROM questions WHERE id = ${id};`;
+  return result.rows[0];
 }
 
 export async function fetchAnswers(questionId: string) {
-  try {
-    const data =
-      await sql<Answer>`SELECT * FROM answers WHERE question_id = ${questionId}
-    ORDER BY CASE WHEN id  = (SELECT answer_id FROM questions WHERE id = ${questionId})
-    THEN 0 ELSE 1 END, id ASC;
-    `;
-    return data.rows;
-  } catch (error) {
-    console.error("Database Error:", error);
-    throw new Error("Failed to fetch answers.");
-  }
+  const result =
+    await sql`SELECT * FROM answers WHERE question_id = ${questionId} ORDER BY id;`;
+  return result.rows;
 }
 
 export async function fetchUser(email: string): Promise<User | undefined> {
